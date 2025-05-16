@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <style>
+    .cat { fill: #5a7d7c; }
+    .inner { fill: white; }
+  </style>
+  <circle cx="100" cy="100" r="90" fill="#f0f5f5" />
+  <path class="cat" d="M100,20 C130,20 155,40 170,70 C175,80 180,95 180,110 C180,155 145,180 100,180 C55,180 20,155 20,110 C20,95 25,80 30,70 C45,40 70,20 100,20 Z" />
+  <circle class="inner" cx="70" cy="90" r="10" />
+  <circle class="inner" cx="130" cy="90" r="10" />
+  <path class="inner" d="M65,130 Q100,150 135,130" stroke="white" stroke-width="3" fill="none" />
+  <path d="M50,60 L30,40 M150,60 L170,40" stroke="#5a7d7c" stroke-width="3" />
+  <path d="M80,110 L100,120 L120,110" stroke="#f0f5f5" stroke-width="2" fill="none" />
+</svg>

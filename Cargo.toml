@@ -37,5 +37,8 @@ async-trait = "0.1.73"
 # Template rendering
 askama = "0.12.0"
 
+# Date and time
+chrono = { version = "0.4.31", features = ["serde"] }
+
 [dev-dependencies]
 tokio-test = "0.4.3"

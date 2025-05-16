@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Wisdom - The Enlightened Cat{% endblock %}
+
+{% block content %}
+<section class="wisdom-page-hero">
+    <h1>Daily <span class="highlight">Whispurr</span></h1>
+    <p class="tagline">A moment of feline wisdom to center your day</p>
+</section>
+
+<section class="daily-wisdom-expanded">
+    <div class="wisdom-card">
+        <div class="wisdom-content">
+            <p>{{ daily_wisdom }}</p>
+        </div>
+        <div class="wisdom-share">
+            <button class="share-button" data-platform="twitter">
+                <span class="share-icon">🐦</span>
+                <span class="share-text">Share on Twitter</span>
+            </button>
+            <button class="share-button" data-platform="facebook">
+                <span class="share-icon">📱</span>
+                <span class="share-text">Share on Facebook</span>
+            </button>
+            <button class="share-button" data-platform="linkedin">
+                <span class="share-icon">💼</span>
+                <span class="share-text">Share on LinkedIn</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="wisdom-archive">
+    <h2>Previous Whispurrs</h2>
+    <p class="coming-soon">Archive of past wisdom coming soon...</p>
+    
+    <div class="cta-container">
+        <button id="wisdom-chat-button" class="cta-button primary">Discuss This Wisdom</button>
+    </div>
+</section>
+
+<section class="wisdom-practice">
+    <h2>Putting Wisdom Into Practice</h2>
+    <div class="practice-container">
+        <div class="practice-card">
+            <h3>Reflect</h3>
+            <p>Take a moment to consider how today's wisdom relates to your current challenges. What insight does it offer?</p>
+        </div>
+        <div class="practice-card">
+            <h3>Apply</h3>
+            <p>Choose one small action you can take today that embodies this wisdom. Even five minutes can create meaningful change.</p>
+        </div>
+        <div class="practice-card">
+            <h3>Share</h3>
+            <p>Consider sharing this wisdom with a colleague who might benefit from it. Wisdom grows when shared.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('wisdom-chat-button').addEventListener('click', function() {
+        document.getElementById('chat-container').classList.remove('hidden');
+        document.getElementById('open-chat').classList.add('hidden');
+        
+        // Pre-populate chat with a question about today's wisdom
+        const wisdom = document.querySelector('.wisdom-content p').textContent;
+        const chatInput = document.getElementById('chat-input');
+        chatInput.value = `I'm reflecting on today's wisdom: "${wisdom}". Can you help me understand how to apply this?`;
+        
+        // Focus the input
+        chatInput.focus();
+    });
+</script>
+{% endblock %}
