@@ -1,0 +1,41 @@
+[package]
+name = "the-enlightened-cat"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "An interactive blog featuring an enlightened cat that provides wisdom to stressed professionals"
+
+[dependencies]
+# Web framework
+axum = "0.6.20"
+tokio = { version = "1.32.0", features = ["full"] }
+tower = "0.4.13"
+tower-http = { version = "0.4.4", features = ["fs", "trace", "cors"] }
+
+# Serialization/Deserialization
+serde = { version = "1.0.188", features = ["derive"] }
+serde_json = "1.0.107"
+
+# HTTP client for API calls
+reqwest = { version = "0.11.20", features = ["json"] }
+
+# Environment variables
+dotenv = "0.15.0"
+
+# Logging
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+
+# Error handling
+anyhow = "1.0.75"
+thiserror = "1.0.48"
+
+# State management
+once_cell = "1.18.0"
+async-trait = "0.1.73"
+
+# Template rendering
+askama = "0.12.0"
+
+[dev-dependencies]
+tokio-test = "0.4.3"

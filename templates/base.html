@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}The Enlightened Cat{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="/">The Enlightened Cat</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/wisdom">Daily Wisdom</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <div id="chat-container" class="hidden">
+        <div id="chat-header">
+            <h3>Chat with The Enlightened Cat</h3>
+            <button id="close-chat">×</button>
+        </div>
+        <div id="chat-messages">
+            <div class="message cat-message">
+                <div class="avatar">🐈</div>
+                <div class="message-content">
+                    <p>Greetings, seeker of balance. I am The Enlightened Cat. How may I guide you today?</p>
+                </div>
+            </div>
+        </div>
+        <div id="chat-input-container">
+            <input type="text" id="chat-input" placeholder="Ask the enlightened cat...">
+            <button id="send-message">Send</button>
+        </div>
+    </div>
+    
+    <button id="open-chat" class="pulse">Chat with The Enlightened Cat 🐈</button>
+
+    <footer>
+        <div class="container">
+            <p>&copy; {% raw %}{{ now() | date(format="%Y") }}{% endraw %} The Enlightened Cat. Finding peace in the corporate jungle.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

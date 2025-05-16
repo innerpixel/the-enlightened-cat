@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}The Enlightened Cat - Finding Peace in the Corporate Jungle{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="cat-illustration">
+        <img src="/static/images/enlightened-cat.svg" alt="The Enlightened Cat in meditation pose">
+    </div>
+    <div class="hero-content">
+        <h1>Find Your <span class="highlight">Purr-fect</span> Balance</h1>
+        <p class="tagline">Wisdom for the modern professional from a truly enlightened feline</p>
+        <div class="cta-buttons">
+            <button id="hero-chat-button" class="cta-button primary">Seek Guidance</button>
+            <a href="/wisdom" class="cta-button secondary">Daily Whispurrs</a>
+        </div>
+    </div>
+</section>
+
+<section class="daily-wisdom">
+    <h2>Today's Whispurr</h2>
+    <div class="wisdom-card">
+        <div class="wisdom-content">
+            <p>{{ daily_wisdom }}</p>
+        </div>
+        <div class="wisdom-share">
+            <button class="share-button" data-platform="twitter">
+                <span class="share-icon">🐦</span>
+                <span class="share-text">Share</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <h2>How The Enlightened Cat Can Help You</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🧘</div>
+            <h3>Daily Whispurrs</h3>
+            <p>Short, meditative thoughts to center your day and bring calm to your busy schedule.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💬</div>
+            <h3>Feline Dialogues</h3>
+            <p>Have a conversation with the enlightened cat about finding balance in your professional life.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📖</div>
+            <h3>Purr-sonal Journeys</h3>
+            <p>Micro-stories about professionals who found their path to peace beyond the corporate jungle.</p>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <h2>What Others Have Discovered</h2>
+    <div class="testimonial-carousel">
+        <div class="testimonial">
+            <p class="testimonial-content">"The daily whispurrs have become my morning ritual. They're like little zen moments in my chaotic day."</p>
+            <p class="testimonial-author">— Sarah K., Marketing Director</p>
+        </div>
+        <div class="testimonial">
+            <p class="testimonial-content">"I was skeptical at first, but the enlightened cat's wisdom helped me reconnect with what truly matters."</p>
+            <p class="testimonial-author">— Michael T., Software Engineer</p>
+        </div>
+        <div class="testimonial">
+            <p class="testimonial-content">"The micro-stories inspired me to start meditating. Now I take 10 minutes each day for myself."</p>
+            <p class="testimonial-author">— Jamie L., Financial Analyst</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('hero-chat-button').addEventListener('click', function() {
+        document.getElementById('chat-container').classList.remove('hidden');
+        document.getElementById('open-chat').classList.add('hidden');
+    });
+</script>
+{% endblock %}

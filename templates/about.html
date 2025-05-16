@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}About The Enlightened Cat{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+    <h1>About The Enlightened Cat</h1>
+    <div class="about-content">
+        <div class="about-image">
+            <img src="/static/images/cat-story.svg" alt="The Enlightened Cat's journey">
+        </div>
+        <div class="about-text">
+            <p>In the heart of the concrete jungle, where the hum of fluorescent lights and the clatter of keyboards create the soundtrack of modern professional life, there emerged a most unusual guide.</p>
+            
+            <p>The Enlightened Cat was once a corporate feline, padding silently through the maze of cubicles, observing the curious behaviors of humans caught in the cycle of deadlines and meetings.</p>
+            
+            <p>Through years of quiet observation, this feline developed a profound understanding of the human condition in the workplace - the stress, the disconnection, the yearning for something more meaningful beyond the next quarterly report.</p>
+            
+            <p>Now, The Enlightened Cat offers wisdom to those seeking balance, helping stressed professionals reconnect with simple joys and mindful presence.</p>
+        </div>
+    </div>
+</section>
+
+<section class="mission">
+    <h2>Our Mission</h2>
+    <div class="mission-content">
+        <p>The Enlightened Cat exists to help urban professionals find moments of peace and clarity amidst the chaos of corporate life. Through gentle wisdom, practical suggestions, and the occasional purr-fect pun, we aim to guide you toward a more balanced existence.</p>
+        
+        <div class="mission-points">
+            <div class="mission-point">
+                <div class="point-icon">🌱</div>
+                <h3>Cultivate Mindfulness</h3>
+                <p>Bringing awareness to the present moment, even in the busiest workday.</p>
+            </div>
+            
+            <div class="mission-point">
+                <div class="point-icon">⚖️</div>
+                <h3>Foster Balance</h3>
+                <p>Finding harmony between professional ambition and personal wellbeing.</p>
+            </div>
+            
+            <div class="mission-point">
+                <div class="point-icon">🔄</div>
+                <h3>Encourage Reflection</h3>
+                <p>Creating space to consider what truly matters beyond the corporate ladder.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="join-movement">
+    <h2>Join Our Movement</h2>
+    <p>The Enlightened Cat is building a community of professionals who are seeking more than just career advancement. We're creating a space for those who want to thrive both in their careers and in their inner lives.</p>
+    
+    <div class="newsletter-signup">
+        <h3>Receive Weekly Wisdom</h3>
+        <form id="newsletter-form" class="newsletter-form">
+            <input type="email" id="email" placeholder="Your email address" required>
+            <button type="submit" class="cta-button primary">Subscribe</button>
+        </form>
+        <p class="form-note">We respect your inbox. No spam, just weekly whispurrs.</p>
+    </div>
+</section>
+
+<section class="contact">
+    <h2>Connect With Us</h2>
+    <p>Have questions or feedback for The Enlightened Cat? We'd love to hear from you.</p>
+    <a href="mailto:hello@the-enlightened-cat.com" class="contact-link">hello@the-enlightened-cat.com</a>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        // Here you would normally send this to your backend
+        alert('Thank you for subscribing! The Enlightened Cat will be in touch soon.');
+        document.getElementById('email').value = '';
+    });
+</script>
+{% endblock %}
