@@ -41,7 +41,7 @@ sudo ufw enable
 ```bash
 sudo mkdir -p /var/www
 cd /var/www
-sudo git clone https://github.com/yourusername/the-enlightened-cat.git
+sudo git clone https://github.com/innerpixel/the-enlightened-cat.git
 sudo chown -R $USER:$USER /var/www/the-enlightened-cat
 cd the-enlightened-cat
 ```
@@ -843,7 +843,7 @@ echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
 cat > /var/www/the-enlightened-cat/.env << EOF
 MISTRAL_API_KEY=your_mistral_api_key
 MISTRAL_API_URL=https://api.mistral.ai/v1
-PORT=3000
+PORT=9000
 RUST_LOG=info
 EOF
 ```
@@ -889,7 +889,7 @@ server {
     server_name the-enlightened-cat.com www.the-enlightened-cat.com;
 
     location / {
-        proxy_pass http://127.0.0.1:3000;
+        proxy_pass http://127.0.0.1:9000;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;

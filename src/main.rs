@@ -58,7 +58,8 @@ async fn main() -> Result<()> {
         .with_state(state);
     
     // Run the server
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let port = config::Config::global().server_port;
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     tracing::info!("Listening on {}", addr);
     
     axum::Server::bind(&addr)
