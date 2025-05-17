@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu toggle
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    
+    if (mobileMenuToggle && mainNav) {
+        mobileMenuToggle.addEventListener('click', function() {
+            mainNav.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        const navLinks = mainNav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mainNav.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            });
+        });
+    }
+    
     // Chat functionality
     const chatContainer = document.getElementById('chat-container');
     const openChatBtn = document.getElementById('open-chat');
