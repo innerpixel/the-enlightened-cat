@@ -1,0 +1,20 @@
+[Unit]
+Description=The Enlightened Cat - Mindfulness Web Application
+After=network.target
+
+[Service]
+Type=simple
+User=nsbasicus
+WorkingDirectory=/home/nsbasicus/the-enlightened-cat
+ExecStart=/home/nsbasicus/.cargo/bin/cargo run --release
+Restart=on-failure
+RestartSec=5
+Environment="RUST_LOG=info"
+
+# Security hardening (optional but recommended)
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
