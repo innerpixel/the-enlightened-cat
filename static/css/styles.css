@@ -189,12 +189,58 @@ nav ul li a:hover {
   padding: 15px;
   display: flex;
   flex-direction: column;
+  scroll-behavior: smooth;
 }
 
 .message {
   display: flex;
   margin-bottom: 15px;
   max-width: 80%;
+}
+
+/* Topic exploration styles */
+.topic-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.topic-buttons button {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.topic-buttons button:hover {
+  background-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.topic-prompt, .topic-suggestions {
+  max-width: 90%;
+}
+
+.typing-indicator .message-content p {
+  display: flex;
+  align-items: center;
+}
+
+.typing-indicator .message-content p::after {
+  content: "...";
+  animation: typing 1.5s infinite;
+  margin-left: 4px;
+}
+
+@keyframes typing {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
 }
 
 .cat-message {

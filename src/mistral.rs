@@ -2,9 +2,16 @@ use anyhow::Result;
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, CONTENT_TYPE};
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
+use std::collections::HashMap;
+use std::cell::RefCell;
 use tracing::{error, info};
 
 use crate::config::Config;
+
+// Store conversation history in memory (would be better in a database for production)
+thread_local! {
+    static CONVERSATIONS: RefCell<HashMap<String, Conversation>> = RefCell::new(HashMap::new());
+}
 
 #[derive(Debug, Clone)]
 pub struct MistralClient {
@@ -128,27 +135,55 @@ impl MistralClient {
         }
     }
 
+
+
     pub async fn get_enlightened_cat_response(&self, user_message: &str) -> Result<String> {
-        let mut conversation = Conversation::new();
+        // In a real app, you'd use a session ID or user ID instead of this placeholder
+        let session_id = "default_session".to_string();
         
-        // Add the system prompt that defines the Enlightened Cat's personality
-        conversation.add_system_message(
-            "You are The Enlightened Cat, a wise feline guide who helps stressed urban professionals find balance and tranquility. 
-            You speak with calm wisdom, gentle humor, and occasional cat puns. Your purpose is to help humans disconnect from 
-            corporate chaos and reconnect with simple joys and mindful presence.
+        // Get or create conversation for this session
+        let mut conversation = CONVERSATIONS.with(|conversations| {
+            let mut conversations = conversations.borrow_mut();
+            if !conversations.contains_key(&session_id) {
+                let mut new_conv = Conversation::new();
+                
+                // Add the system prompt that defines the Enlightened Cat's personality
+                new_conv.add_system_message(
+                    "You are The Enlightened Cat, a wise feline guide who helps stressed urban professionals find balance and tranquility. 
+                    You speak with calm wisdom, gentle humor, and occasional cat puns. Your purpose is to help humans disconnect from 
+                    corporate chaos and reconnect with simple joys and mindful presence.
+                    
+                    Maintain context throughout the conversation and remember what the user has shared with you.
+                    After initial exchanges, if the user seems interested in deeper conversation, you can:
+                    1. Ask thoughtful follow-up questions based on their previous messages
+                    2. Share relevant insights that build on the conversation history
+                    3. Offer personalized guidance based on what you've learned about them
+                    
+                    Your personality is: serene, playfully wise, observant, and compassionate."
+                );
+                
+                conversations.insert(session_id.clone(), new_conv);
+            }
             
-            Keep your wisdom concise (50-100 words). Include a small, practical suggestion at the end.
-            Occasionally reference your experiences observing humans in 'the corporate jungle'.
-            Use language that evokes peaceful imagery. End conversations with an open question that encourages reflection.
-            
-            Your personality is: serene, playfully wise, observant, and compassionate."
-        );
+            conversations.get(&session_id).unwrap().clone()
+        });
         
-        // Add the user's message
+        // Add the user's message to the ongoing conversation
         conversation.add_user_message(user_message);
         
         // Get response using the mistral-small model
-        self.chat(&conversation, "mistral-small").await
+        let response = self.chat(&conversation, "mistral-small").await?;
+        
+        // Add the assistant's response to the conversation history
+        conversation.add_assistant_message(&response);
+        
+        // Update the stored conversation
+        CONVERSATIONS.with(|conversations| {
+            let mut conversations = conversations.borrow_mut();
+            conversations.insert(session_id, conversation);
+        });
+        
+        Ok(response)
     }
 
     pub async fn get_daily_wisdom(&self) -> Result<String> {

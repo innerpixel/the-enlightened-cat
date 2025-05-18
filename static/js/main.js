@@ -40,6 +40,11 @@ document.addEventListener('DOMContentLoaded', function() {
         openChatBtn.classList.remove('hidden');
     });
     
+    // Track conversation state
+    let conversationDepth = 0;
+    let currentTopic = null;
+    let suggestedTopics = [];
+    
     // Send message function
     function sendMessage() {
         const message = chatInput.value.trim();
@@ -65,13 +70,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Scroll to bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
         
-        // Send to API
+        // Send to API with conversation metadata
         fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: message }),
+            body: JSON.stringify({ 
+                message: message,
+                conversationDepth: conversationDepth,
+                currentTopic: currentTopic
+            }),
         })
         .then(response => response.json())
         .then(data => {
@@ -80,6 +89,26 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add cat response
             addMessage('cat', data.message);
+            
+            // Update conversation depth
+            conversationDepth++;
+            
+            // After a few exchanges, offer topic exploration
+            if (conversationDepth === 3) {
+                setTimeout(() => {
+                    addTopicExplorationPrompt();
+                }, 1000);
+            }
+            
+            // If the response includes suggested topics, store them
+            if (data.suggestedTopics && data.suggestedTopics.length > 0) {
+                suggestedTopics = data.suggestedTopics;
+                if (suggestedTopics.length > 0) {
+                    setTimeout(() => {
+                        addTopicSuggestions(suggestedTopics);
+                    }, 1000);
+                }
+            }
         })
         .catch(error => {
             // Remove typing indicator
@@ -89,6 +118,102 @@ document.addEventListener('DOMContentLoaded', function() {
             addMessage('cat', "I seem to be having a moment of contemplation. Could you try again?");
             console.error('Error:', error);
         });
+    }
+    
+    // Add topic exploration prompt
+    function addTopicExplorationPrompt() {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message cat-message topic-prompt';
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.textContent = '🐈';
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        
+        const paragraph = document.createElement('p');
+        paragraph.textContent = "I sense you might want to explore this topic more deeply. Would you like to have a more in-depth conversation about what's on your mind?";
+        
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'topic-buttons';
+        
+        const yesButton = document.createElement('button');
+        yesButton.textContent = 'Yes, let\'s go deeper';
+        yesButton.addEventListener('click', () => {
+            // Remove the prompt
+            chatMessages.removeChild(messageDiv);
+            // Send a message to transition to deeper conversation
+            chatInput.value = "Yes, I'd like to explore this more deeply.";
+            sendMessage();
+        });
+        
+        const noButton = document.createElement('button');
+        noButton.textContent = 'No, just zen wisdom';
+        noButton.addEventListener('click', () => {
+            // Remove the prompt
+            chatMessages.removeChild(messageDiv);
+            // Send a message to continue with regular wisdom
+            chatInput.value = "I prefer to keep our conversation light and zen.";
+            sendMessage();
+        });
+        
+        buttonContainer.appendChild(yesButton);
+        buttonContainer.appendChild(noButton);
+        
+        messageContent.appendChild(paragraph);
+        messageContent.appendChild(buttonContainer);
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(messageContent);
+        
+        chatMessages.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Add topic suggestions
+    function addTopicSuggestions(topics) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message cat-message topic-suggestions';
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.textContent = '🐈';
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        
+        const paragraph = document.createElement('p');
+        paragraph.textContent = "Would you like to explore any of these topics?";
+        
+        const topicContainer = document.createElement('div');
+        topicContainer.className = 'topic-buttons';
+        
+        topics.forEach(topic => {
+            const topicButton = document.createElement('button');
+            topicButton.textContent = topic;
+            topicButton.addEventListener('click', () => {
+                // Set current topic
+                currentTopic = topic;
+                // Send a message to explore this topic
+                chatInput.value = `Let's talk about ${topic}`;
+                sendMessage();
+                // Remove the suggestions
+                chatMessages.removeChild(messageDiv);
+            });
+            topicContainer.appendChild(topicButton);
+        });
+        
+        messageContent.appendChild(paragraph);
+        messageContent.appendChild(topicContainer);
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(messageContent);
+        
+        chatMessages.appendChild(messageDiv);
+        
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
     // Add message to chat
