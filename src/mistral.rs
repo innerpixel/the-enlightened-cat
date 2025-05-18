@@ -166,6 +166,6 @@ impl MistralClient {
         
         conversation.add_user_message("Please provide today's Daily Whispurr meditation.");
         
-        self.chat(&conversation, "mistral-small").await
+        self.chat(&conversation, "mistral-large").await
     }
 }
