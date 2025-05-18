@@ -8,7 +8,7 @@
 // - axum: Web framework for handling HTTP requests
 // - askama: Templating engine for rendering HTML
 // - tracing: Logging framework
-use axum:{
+use axum::{
     extract::State,     // For accessing application state in handlers
     response::Html,     // For returning HTML responses
 };

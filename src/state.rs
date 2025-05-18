@@ -52,7 +52,7 @@ impl AppState {
     /// Returns a Result that contains the AppState if successful
     pub async fn new() -> Result<Self> {
         // Initialize config (loads environment variables)
-        Config::init()?
+        Config::init()?;
         
         // Create Mistral client for API interactions
         let mistral_client = Arc::new(MistralClient::new());

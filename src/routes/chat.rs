@@ -8,7 +8,7 @@
 // - axum: Web framework (similar to Express in Node.js)
 // - serde: Serialization/deserialization library (for JSON handling)
 // - tracing: Logging framework
-use axum:{
+use axum::{
     extract::{Json, State},  // Extractors to get JSON data and app state from requests
     http::StatusCode,        // HTTP status codes (200 OK, 500 Error, etc.)
 };
