@@ -251,8 +251,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Share buttons
-    const shareButtons = document.querySelectorAll('.share-button');
+    // Share buttons for Twitter and Facebook only
+    // LinkedIn is handled separately in linkedin-share.js
+    const shareButtons = document.querySelectorAll('.twitter-share, .facebook-share');
     shareButtons.forEach(button => {
         button.addEventListener('click', function() {
             const platform = this.dataset.platform;
@@ -266,9 +267,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 case 'facebook':
                     shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(wisdom)}`;
                     break;
-                case 'linkedin':
-                    shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent('Wisdom from The Enlightened Cat')}&summary=${encodeURIComponent(wisdom)}`;
-                    break;
             }
             
             if (shareUrl) {
@@ -276,6 +274,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Note: LinkedIn sharing is handled in linkedin-share.js
     
     // Newsletter form
     const newsletterForm = document.getElementById('newsletter-form');

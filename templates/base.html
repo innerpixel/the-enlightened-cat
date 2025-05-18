@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}The Enlightened Cat{% endblock %}</title>
+    
+    <!-- OpenGraph tags for better social media sharing -->
+    <meta property="og:title" content="{% block og_title %}Wisdom from The Enlightened Cat{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}Finding peace in the professional jungle{% endblock %}" />
+    <meta property="og:url" content="https://the-enlightened-cat.com{% block og_url %}/{% endblock %}" />
+    <meta property="og:image" content="https://the-enlightened-cat.com/static/images/enlightened-cat.svg" />
+    <meta property="og:type" content="article" />
     <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     {% block head %}{% endblock %}
+    <!-- LinkedIn sharing styles -->
+    <link rel="stylesheet" href="/static/css/linkedin-share.css">
 </head>
 <body>
     <header>
@@ -65,6 +74,7 @@
     </footer>
 
     <script src="/static/js/main.js"></script>
+    <script src="/static/js/linkedin-share.js"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,235 @@
+/* LinkedIn Share Modal Styles */
+.linkedin-share-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none; /* Disable pointer events when modal is hidden */
+  transition: opacity 0.3s ease;
+}
+
+.linkedin-share-modal.active {
+  opacity: 1;
+  pointer-events: auto; /* Enable clicks when modal is visible */
+}
+
+.linkedin-modal-content {
+  background-color: white;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.linkedin-share-modal.active .linkedin-modal-content {
+  transform: translateY(0);
+}
+
+.preview-header {
+  background-color: #0077B5;
+  color: white;
+  padding: 15px 20px;
+  font-weight: 600;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-header .close-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.preview-content {
+  padding: 20px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.preview-image {
+  width: 100%;
+  height: 150px;
+  background-color: #f7f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.preview-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.preview-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.preview-subtitle {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.preview-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.preview-source {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 10px;
+}
+
+.preview-source a {
+  color: #0077b5;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.preview-source a:hover {
+  color: #005582;
+  text-decoration: underline;
+}
+
+.comment-section {
+  padding: 20px;
+}
+
+.comment-section label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+}
+
+.comment-section textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: var(--font-body);
+  resize: vertical;
+  margin-bottom: 15px;
+}
+
+.preview-actions {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.preview-actions button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preview-actions .cancel {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  color: #555;
+}
+
+.preview-actions .cancel:hover {
+  background-color: #f5f5f5;
+}
+
+.preview-actions .share {
+  background-color: #0077B5;
+  border: none;
+  color: white;
+}
+
+.preview-actions .share:hover {
+  background-color: #005e93;
+}
+
+/* LinkedIn logo */
+.linkedin-logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+/* Animation for loading state */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.share.loading {
+  position: relative;
+  pointer-events: none;
+  animation: pulse 1.5s infinite;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .linkedin-modal-content {
+    width: 95%;
+  }
+  
+  .preview-actions {
+    flex-direction: column;
+  }
+  
+  .preview-actions button {
+    width: 100%;
+  }
+}
+
+/* Toast notification */
+.share-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: #0077B5;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  z-index: 2000;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.share-toast.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}

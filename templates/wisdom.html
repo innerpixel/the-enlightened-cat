@@ -2,6 +2,10 @@
 
 {% block title %}Daily Wisdom - The Enlightened Cat{% endblock %}
 
+{% block og_title %}Daily Whispurr from The Enlightened Cat{% endblock %}
+{% block og_description %}{{ daily_wisdom }}{% endblock %}
+{% block og_url %}/wisdom{% endblock %}
+
 {% block content %}
 <section class="wisdom-page-hero">
     <h1>Daily <span class="highlight">Whispurr</span></h1>
@@ -14,18 +18,18 @@
             <p>{{ daily_wisdom }}</p>
         </div>
         <div class="wisdom-share">
-            <button class="share-button" data-platform="twitter">
+            <a href="#" class="share-button twitter-share" data-platform="twitter">
                 <span class="share-icon">🐦</span>
                 <span class="share-text">Share on Twitter</span>
-            </button>
-            <button class="share-button" data-platform="facebook">
+            </a>
+            <a href="#" class="share-button facebook-share" data-platform="facebook">
                 <span class="share-icon">📱</span>
                 <span class="share-text">Share on Facebook</span>
-            </button>
-            <button class="share-button" data-platform="linkedin">
+            </a>
+            <a href="#" class="share-button linkedin-share" data-platform="linkedin">
                 <span class="share-icon">💼</span>
                 <span class="share-text">Share on LinkedIn</span>
-            </button>
+            </a>
         </div>
     </div>
 </section>
