@@ -330,6 +330,55 @@ nav ul li a:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
+#share-conversation {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+  border: 2px solid var(--color-secondary);
+  border-radius: 20px;
+  padding: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative; /* For tooltip positioning */
+  min-width: 40px; /* Ensure minimum width */
+  height: 40px; /* Match height with send button */
+}
+
+#share-conversation svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--color-text);
+}
+
+#share-conversation:hover {
+  background-color: var(--color-secondary);
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+}
+
+.tooltip {
+  position: absolute;
+  background-color: var(--color-card-bg);
+  color: var(--color-text);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--color-secondary);
+  margin-bottom: 5px;
+}
+
 #open-chat {
   position: fixed;
   bottom: 20px;

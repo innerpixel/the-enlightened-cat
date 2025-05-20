@@ -251,31 +251,107 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Share buttons for Twitter and Facebook only
-    // LinkedIn is handled separately in linkedin-share.js
-    const shareButtons = document.querySelectorAll('.twitter-share, .facebook-share');
-    shareButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const platform = this.dataset.platform;
-            const wisdom = document.querySelector('.wisdom-content p').textContent;
-            let shareUrl = '';
+    // Share conversation functionality
+    const shareConversationBtn = document.getElementById('share-conversation');
+    if (shareConversationBtn) {
+        shareConversationBtn.addEventListener('click', function() {
+            // Format the conversation for sharing
+            const messages = chatMessages.querySelectorAll('.message');
+            let conversationText = "Conversation with The Enlightened Cat:\n\n";
             
-            switch(platform) {
-                case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(wisdom + ' - The Enlightened Cat')}&url=${encodeURIComponent(window.location.href)}`;
-                    break;
-                case 'facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(wisdom)}`;
-                    break;
+            messages.forEach(message => {
+                const isUserMessage = message.classList.contains('user-message');
+                const messageContent = message.querySelector('.message-content p');
+                if (messageContent) {
+                    const prefix = isUserMessage ? "You: " : "The Enlightened Cat: ";
+                    conversationText += `${prefix}${messageContent.textContent}\n\n`;
+                }
+            });
+            
+            // Add a signature
+            conversationText += "\n---\nShared from The Enlightened Cat - Finding peace in the corporate jungle.\n";
+            conversationText += "Visit: https://the-enlightened-cat.com";
+            
+            console.log('Attempting to copy text:', conversationText);
+            
+            // Try to copy using the modern Clipboard API with fallback
+            function showCopySuccess() {
+                console.log('Copy successful!');
+                // Show tooltip feedback
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.textContent = 'Conversation copied to clipboard!';
+                shareConversationBtn.appendChild(tooltip);
+                
+                // Show the tooltip
+                setTimeout(() => {
+                    tooltip.style.opacity = '1';
+                }, 10);
+                
+                // Hide and remove the tooltip after a delay
+                setTimeout(() => {
+                    tooltip.style.opacity = '0';
+                    setTimeout(() => {
+                        if (tooltip.parentNode === shareConversationBtn) {
+                            shareConversationBtn.removeChild(tooltip);
+                        }
+                    }, 300);
+                }, 2000);
             }
             
-            if (shareUrl) {
-                window.open(shareUrl, '_blank');
+            function fallbackCopyTextToClipboard(text) {
+                console.log('Using fallback clipboard method');
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                
+                // Make the textarea out of viewport
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                
+                textArea.focus();
+                textArea.select();
+                
+                let successful = false;
+                try {
+                    successful = document.execCommand('copy');
+                    if (successful) {
+                        showCopySuccess();
+                    } else {
+                        console.error('Failed to copy with execCommand');
+                        alert('Copy failed. Please try again or use Ctrl+C after selecting the text.');
+                    }
+                } catch (err) {
+                    console.error('Error during execCommand copy', err);
+                    alert('Copy failed. Please try again or use Ctrl+C after selecting the text.');
+                }
+                
+                document.body.removeChild(textArea);
+            }
+            
+            // Try the modern approach first
+            if (navigator.clipboard) {
+                console.log('Using modern clipboard API');
+                navigator.clipboard.writeText(conversationText)
+                    .then(() => {
+                        showCopySuccess();
+                    })
+                    .catch(err => {
+                        console.error('Clipboard API error:', err);
+                        // Fall back to older method
+                        fallbackCopyTextToClipboard(conversationText);
+                    });
+            } else {
+                console.log('Clipboard API not available');
+                fallbackCopyTextToClipboard(conversationText);
             }
         });
-    });
+    }
     
-    // Note: LinkedIn sharing is handled in linkedin-share.js
+    // All social media sharing functionality has been removed
+    // Using copy-to-clipboard functionality for sharing instead, which provides
+    // a more consistent experience across platforms and gives users more control
     
     // Newsletter form
     const newsletterForm = document.getElementById('newsletter-form');

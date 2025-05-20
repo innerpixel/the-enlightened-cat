@@ -16,8 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     {% block head %}{% endblock %}
-    <!-- LinkedIn sharing styles -->
-    <link rel="stylesheet" href="/static/css/linkedin-share.css">
+    <!-- LinkedIn sharing styles removed -->
 </head>
 <body>
     <header>
@@ -55,13 +54,20 @@
             <div class="message cat-message">
                 <div class="avatar">🐈</div>
                 <div class="message-content">
-                    <p>Greetings, seeker of balance. I am The Enlightened Cat. How may I guide you today?</p>
+                    <p>Greetings, seeker of balance. You found The Enlightened Cat. Are you purring or are you dispurring?</p>
                 </div>
             </div>
         </div>
         <div id="chat-input-container">
             <input type="text" id="chat-input" placeholder="Ask the enlightened cat...">
             <button id="send-message">Send</button>
+            <button id="share-conversation" title="Copy conversation to clipboard">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+            </button>
         </div>
     </div>
     
@@ -74,7 +80,6 @@
     </footer>
 
     <script src="/static/js/main.js"></script>
-    <script src="/static/js/linkedin-share.js"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

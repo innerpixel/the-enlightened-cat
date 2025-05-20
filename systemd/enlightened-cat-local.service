@@ -1,0 +1,20 @@
+[Unit]
+Description=The Enlightened Cat - Mindfulness Web Application (Local Development)
+After=network.target
+
+[Service]
+Type=simple
+User=innerpixel
+WorkingDirectory=/home/innerpixel/githubprojects/the-enlightened-cat
+ExecStart=/home/innerpixel/.cargo/bin/cargo run
+Restart=on-failure
+RestartSec=5
+Environment="RUST_LOG=debug"
+
+# Security hardening (optional but recommended)
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
