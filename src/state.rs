@@ -18,6 +18,7 @@ use tokio::sync::RwLock;
 // Import our configuration and Mistral API client
 use crate::config::Config;
 use crate::mistral::MistralClient;
+use crate::quantum::QuantumWisdom;
 
 /// The central application state that is shared across all request handlers
 /// 
@@ -36,6 +37,9 @@ pub struct AppState {
     /// The cached daily wisdom, wrapped in Arc<RwLock> for thread-safe access
     /// Option<String> means it can be None (not yet fetched) or Some(wisdom)
     pub daily_wisdom: Arc<RwLock<Option<String>>>,
+    
+    /// The cached quantum wisdom, wrapped in Arc<RwLock> for thread-safe access
+    pub quantum_wisdom: Arc<RwLock<Option<QuantumWisdom>>>,
     
     /// Timestamp of when the wisdom was last updated, for determining refresh needs
     pub wisdom_last_updated: Arc<RwLock<Option<chrono::DateTime<chrono::Utc>>>>,
@@ -61,6 +65,7 @@ impl AppState {
         Ok(Self {
             mistral_client,
             daily_wisdom: Arc::new(RwLock::new(None)),  // Start with no cached wisdom
+            quantum_wisdom: Arc::new(RwLock::new(None)),  // Start with no cached quantum wisdom
             wisdom_last_updated: Arc::new(RwLock::new(None)),  // No update timestamp yet
         })
     }
@@ -112,6 +117,51 @@ impl AppState {
                 None => {
                     // This shouldn't happen, but just in case
                     let new_wisdom = self.mistral_client.get_daily_wisdom().await?;
+                    Ok(new_wisdom)
+                }
+            }
+        }
+    }
+    
+    pub async fn get_quantum_wisdom(&self) -> Result<QuantumWisdom> {
+        // Get current time for comparison
+        let now = chrono::Utc::now();
+        
+        // Check if we need to refresh the wisdom
+        let should_refresh = {
+            // Acquire a read lock on the last_updated timestamp
+            let last_updated = self.wisdom_last_updated.read().await;
+            
+            // Determine if refresh is needed based on timestamp
+            match *last_updated {
+                Some(time) => {
+                    // Check if it's a new day or if quantum wisdom hasn't been set
+                    now.date_naive() != time.date_naive()
+                }
+                None => true,  // No timestamp means we need to fetch wisdom
+            }
+        };
+
+        if should_refresh {
+            // Generate new quantum wisdom
+            let new_wisdom = self.mistral_client.get_quantum_wisdom().await?;
+            
+            // Update wisdom and timestamp
+            let mut wisdom = self.quantum_wisdom.write().await;
+            *wisdom = Some(new_wisdom.clone());
+            
+            let mut last_updated = self.wisdom_last_updated.write().await;
+            *last_updated = Some(now);
+            
+            Ok(new_wisdom)
+        } else {
+            // Return cached wisdom
+            let wisdom = self.quantum_wisdom.read().await;
+            match &*wisdom {
+                Some(w) => Ok(w.clone()),
+                None => {
+                    // This shouldn't happen, but just in case
+                    let new_wisdom = self.mistral_client.get_quantum_wisdom().await?;
                     Ok(new_wisdom)
                 }
             }

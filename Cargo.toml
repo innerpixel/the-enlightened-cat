@@ -40,5 +40,8 @@ askama = "0.12.0"
 # Date and time
 chrono = { version = "0.4.31", features = ["serde"] }
 
+# Random number generation
+rand = "0.8.5"
+
 [dev-dependencies]
 tokio-test = "0.4.3"

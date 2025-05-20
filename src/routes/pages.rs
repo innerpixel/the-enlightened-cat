@@ -19,6 +19,11 @@ use tracing::info;     // For logging information
 use crate::state::AppState;
 use crate::templates::*;  // Import all template structs (IndexTemplate, AboutTemplate, etc.)
 
+// Define a template for the quantum wisdom page
+#[derive(Template)]
+#[template(path = "quantum_wisdom.html")]
+pub struct QuantumWisdomTemplate {}
+
 /// Handler function for the home page (GET /)
 /// 
 /// This function:
@@ -96,5 +101,23 @@ pub async fn wisdom_page(State(state): State<AppState>) -> Html<String> {
     // If rendering fails, provide a simple fallback HTML
     Html(template.render().unwrap_or_else(|_| {
         "<h1>Daily Wisdom</h1><p>Wisdom loading...</p>".to_string()
+    }))
+}
+
+/// Handler function for the quantum wisdom page (GET /quantum-wisdom)
+/// 
+/// This function renders the quantum wisdom page that displays wisdom in
+/// multiple quantum states until observed by the user.
+pub async fn quantum_wisdom_page() -> Html<String> {
+    // Log that we're rendering the quantum wisdom page
+    info!("Rendering quantum wisdom page");
+    
+    // Create a template instance for the quantum wisdom page
+    let template = QuantumWisdomTemplate {};
+    
+    // Render the template to HTML and wrap it in an Html response
+    // If rendering fails, provide a simple fallback HTML
+    Html(template.render().unwrap_or_else(|_| {
+        "<h1>Quantum Whispurrs</h1><p>Quantum states loading...</p>".to_string()
     }))
 }
