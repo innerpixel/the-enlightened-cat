@@ -7,6 +7,7 @@ use std::cell::RefCell;
 use tracing::{error, info};
 
 use crate::config::Config;
+use crate::quantum::QuantumWisdom;
 
 // Store conversation history in memory (would be better in a database for production)
 thread_local! {
@@ -202,5 +203,35 @@ impl MistralClient {
         conversation.add_user_message("Please provide today's Daily Whispurr meditation.");
         
         self.chat(&conversation, "mistral-small").await
+    }
+
+    pub async fn get_quantum_wisdom(&self) -> Result<QuantumWisdom> {
+        let mut conversation = Conversation::new();
+        
+        conversation.add_system_message(
+            "You are The Enlightened Cat, a wise feline who exists in a quantum state.
+            Generate 3-5 DIFFERENT versions of a daily wisdom ('Quantum Whispurr').
+            Each version should:
+            - Feel like it comes from a slightly different reality or perspective
+            - Be 30-70 words, poetic or like a tiny fable
+            - Include a subtle cat perspective
+            - End with a question or invitation to reflect
+            
+            Format your response as a JSON array of strings, each containing one version.
+            Example: [\"Wisdom 1...\", \"Wisdom 2...\", \"Wisdom 3...\"]"
+        );
+        
+        conversation.add_user_message("Generate quantum wisdom variants");
+        
+        let response = self.chat(&conversation, "mistral-small").await?;
+        
+        // Parse the JSON array from the response
+        let wisdom_variants: Vec<String> = serde_json::from_str(&response)
+            .unwrap_or_else(|_| {
+                // Fallback if parsing fails
+                vec![response.clone()]
+            });
+        
+        Ok(QuantumWisdom::new(wisdom_variants))
     }
 }
