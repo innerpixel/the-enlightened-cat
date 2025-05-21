@@ -1,6 +1,6 @@
 # 🐈 The Enlightened Cat
 
-![The Enlightened Cat](https://raw.githubusercontent.com/innerpixel/the-enlightened-cat/main/static/images/enlightened-cat.png)
+![The Enlightened Cat](https://raw.githubusercontent.com/innerpixel/the-enlightened-cat/main/static/images/enlightened-cat-art.png)
 
 ## Finding Peace in the Corporate Jungle
 
