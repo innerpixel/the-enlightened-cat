@@ -258,6 +258,257 @@
     
     /* Share button styles removed */
     
+    /* Wisdom exploration styles */
+    .wisdom-explore-container {
+        margin-top: 2rem;
+        text-align: center;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .wisdom-explore-container.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .wisdom-explore-prompt {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: #f0f0f0;
+        text-shadow: 0 0 5px rgba(248, 147, 86, 0.3);
+    }
+    
+    .explore-wisdom-button {
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 30px;
+        background-color: rgba(248, 147, 86, 0.8);
+        color: #413317;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 15px rgba(248, 147, 86, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .explore-wisdom-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: all 0.4s ease;
+    }
+    
+    .explore-wisdom-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(248, 147, 86, 0.4);
+        background-color: rgba(248, 147, 86, 0.9);
+    }
+    
+    .explore-wisdom-button:hover::before {
+        left: 100%;
+    }
+    
+    .explore-wisdom-button:active {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(248, 147, 86, 0.3);
+    }
+    
+    /* Chat interface styles */
+    .wisdom-chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        max-width: 90vw;
+        height: 450px;
+        max-height: 70vh;
+        background-color: rgba(65, 51, 23, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1000;
+        transform: translateY(100%);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        backdrop-filter: blur(10px);
+    }
+    
+    .wisdom-chat-container.visible {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    .wisdom-chat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background-color: rgba(248, 147, 86, 0.2);
+        border-bottom: 1px solid rgba(248, 147, 86, 0.3);
+    }
+    
+    .wisdom-chat-title {
+        margin: 0;
+        color: #F89356;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+    
+    .wisdom-chat-close {
+        background: none;
+        border: none;
+        color: #f0f0f0;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+    }
+    
+    .wisdom-chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .wisdom-chat-message {
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        line-height: 1.4;
+        position: relative;
+        animation: fadeIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .user-message {
+        align-self: flex-end;
+        background-color: rgba(248, 147, 86, 0.3);
+        border-bottom-right-radius: 5px;
+        color: #f0f0f0;
+    }
+    
+    .cat-message {
+        align-self: flex-start;
+        background-color: rgba(136, 144, 132, 0.2);
+        border-bottom-left-radius: 5px;
+        color: #f0f0f0;
+    }
+    
+    .cat-message::before {
+        content: '🐈';
+        position: absolute;
+        left: -25px;
+        top: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .wisdom-chat-input-container {
+        padding: 15px;
+        display: flex;
+        gap: 10px;
+        border-top: 1px solid rgba(248, 147, 86, 0.3);
+    }
+    
+    .wisdom-chat-input {
+        flex: 1;
+        padding: 10px 15px;
+        border: 1px solid rgba(248, 147, 86, 0.3);
+        border-radius: 20px;
+        background-color: rgba(65, 51, 23, 0.5);
+        color: #f0f0f0;
+        font-size: 0.9rem;
+    }
+    
+    .wisdom-chat-input:focus {
+        outline: none;
+        border-color: rgba(248, 147, 86, 0.6);
+        box-shadow: 0 0 5px rgba(248, 147, 86, 0.3);
+    }
+    
+    .wisdom-chat-send {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #F89356;
+        border: none;
+        color: #413317;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .wisdom-chat-send:hover {
+        background-color: #e87d36;
+        transform: scale(1.05);
+    }
+    
+    .wisdom-interpretation {
+        margin-bottom: 10px;
+    }
+    
+    .wisdom-question {
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+    
+    .wisdom-action {
+        border-top: 1px solid rgba(248, 147, 86, 0.3);
+        padding-top: 10px;
+    }
+    
+    /* Typing indicator styles */
+    .typing-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 4px;
+    }
+    
+    .typing-indicator span {
+        width: 8px;
+        height: 8px;
+        background-color: rgba(248, 147, 86, 0.7);
+        border-radius: 50%;
+        display: inline-block;
+        animation: typing-bounce 1.4s infinite ease-in-out both;
+    }
+    
+    .typing-indicator span:nth-child(1) {
+        animation-delay: 0s;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes typing-bounce {
+        0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; }
+        40% { transform: scale(1); opacity: 1; }
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .wisdom-field {
@@ -315,7 +566,30 @@
             <div id="loading-image" class="loading-spinner hidden"></div>
             <img id="quantum-image" class="quantum-image hidden" alt="Quantum visualization">
         </div>
-        <!-- Sharing functionality removed -->
+        <div class="wisdom-explore-container hidden" id="wisdom-explore">
+            <p class="wisdom-explore-prompt">🌱 Would you like to explore what this means for your life?</p>
+            <button id="explore-wisdom-btn" class="explore-wisdom-button">Explore Wisdom</button>
+        </div>
+    </div>
+</div>
+
+<!-- Wisdom Chat Interface -->
+<div id="wisdom-chat" class="wisdom-chat-container">
+    <div class="wisdom-chat-header">
+        <h3 class="wisdom-chat-title">Exploring Your Wisdom</h3>
+        <button id="wisdom-chat-close" class="wisdom-chat-close">&times;</button>
+    </div>
+    <div id="wisdom-chat-messages" class="wisdom-chat-messages">
+        <!-- Messages will be added here dynamically -->
+    </div>
+    <div class="wisdom-chat-input-container">
+        <input type="text" id="wisdom-chat-input" class="wisdom-chat-input" placeholder="Ask about your wisdom...">
+        <button id="wisdom-chat-send" class="wisdom-chat-send">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        </button>
     </div>
 </div>
 {% endblock %}
@@ -605,10 +879,176 @@ document.addEventListener('DOMContentLoaded', function() {
                 quantumImage.style.transform = 'scale(1)';
                 quantumImage.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.4)';
             });
+            
+            // Show the explore wisdom button after the image appears
+            setTimeout(() => {
+                const wisdomExplore = document.getElementById('wisdom-explore');
+                wisdomExplore.classList.remove('hidden');
+                wisdomExplore.classList.add('visible');
+            }, 1000);
         }, 2500);
     }
     
     // Social media sharing functionality removed
+    
+    // Wisdom exploration chat functionality
+    const wisdomChat = document.getElementById('wisdom-chat');
+    const wisdomChatClose = document.getElementById('wisdom-chat-close');
+    const wisdomChatMessages = document.getElementById('wisdom-chat-messages');
+    const wisdomChatInput = document.getElementById('wisdom-chat-input');
+    const wisdomChatSend = document.getElementById('wisdom-chat-send');
+    const exploreWisdomBtn = document.getElementById('explore-wisdom-btn');
+    
+    let collapsedWisdomText = '';
+    let selectedDomain = '';
+    
+    // Function to add a message to the chat
+    function addChatMessage(content, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `wisdom-chat-message ${isUser ? 'user-message' : 'cat-message'}`;
+        messageDiv.innerHTML = content;
+        wisdomChatMessages.appendChild(messageDiv);
+        wisdomChatMessages.scrollTop = wisdomChatMessages.scrollHeight;
+    }
+    
+    // Function to generate introspective response
+    function generateIntrospectiveResponse(wisdom, domain) {
+        // In a real implementation, this would call the Mistral API
+        // For now, we'll use predefined responses based on the domain
+        
+        // Sample responses for each domain
+        const responses = {
+            'Essence': {
+                interpretation: "This wisdom speaks to your core being, the fundamental truth that resides at the center of your existence. It suggests that beneath the layers of daily experience, there's a constant, unchanging essence that defines you.",
+                question: "When was the last time you felt truly connected to your deepest self, beyond roles and responsibilities?",
+                action: "Find a quiet moment today to place your hand on your heart and simply breathe, acknowledging your essential nature beyond all doing."
+            },
+            'Inner Path': {
+                interpretation: "Your chosen wisdom illuminates the journey within. It speaks to the winding road of self-discovery that often requires patience and gentle persistence to navigate.",
+                question: "What internal obstacles have you been circling around rather than moving through?",
+                action: "Before sleep tonight, journal about one inner barrier you're ready to approach differently."
+            },
+            'Outer Path': {
+                interpretation: "This wisdom reflects how you move through the external world. It suggests that your actions and choices create ripples that extend far beyond what you can see.",
+                question: "How might your current path be affecting others in ways you haven't fully considered?",
+                action: "Tomorrow, choose one interaction where you'll pause before responding, considering the wider impact of your words."
+            },
+            'Portal': {
+                interpretation: "You've selected a wisdom that stands at the threshold between what is and what could be. It invites you to step through into new possibility.",
+                question: "What doorway of opportunity have you been standing before, hesitant to cross?",
+                action: "Create a small ritual to mark your willingness to enter new territory—perhaps lighting a candle or placing a stone in a new location as a symbol."
+            },
+            'Friction': {
+                interpretation: "The wisdom you've chosen acknowledges tension and challenge. Like the grain of sand that irritates the oyster into creating a pearl, this friction contains creative potential.",
+                question: "What current difficulty might actually be serving your growth in disguised ways?",
+                action: "Find an object that represents a current challenge and hold it in your hand, thanking it for its hidden gifts before setting it down."
+            },
+            'Crystallization': {
+                interpretation: "This wisdom represents a moment of clarity where scattered elements come together in perfect alignment. It speaks to the integration of experience into wisdom.",
+                question: "What insights have been gradually forming in your awareness that are now ready to be fully recognized?",
+                action: "Write down three seemingly disconnected experiences from your recent life and draw lines between them, noting any patterns that emerge."
+            }
+        };
+        
+        // Default response if domain is not recognized
+        let response = {
+            interpretation: "This wisdom contains layers of meaning unique to your journey. As you sit with it, notice how it resonates with your current life situation.",
+            question: "How does this wisdom speak to what you're experiencing right now?",
+            action: "Take a moment today to breathe deeply and reflect on how you might embody this wisdom in one small action."
+        };
+        
+        // Use domain-specific response if available
+        if (responses[domain]) {
+            response = responses[domain];
+        }
+        
+        return response;
+    }
+    
+    // Event listener for the Explore Wisdom button
+    exploreWisdomBtn.addEventListener('click', () => {
+        // Show the chat interface
+        wisdomChat.classList.add('visible');
+        
+        // Get the collapsed wisdom text
+        collapsedWisdomText = document.getElementById('prompt-text').textContent;
+        
+        // Get the selected domain
+        const selectedNode = document.querySelector('.wisdom-node.selected');
+        if (selectedNode) {
+            selectedDomain = selectedNode.querySelector('.node-domain').textContent;
+        }
+        
+        // Add initial messages
+        addChatMessage("I'm reflecting on this wisdom... can you help me understand it?", true);
+        
+        // Generate introspective response
+        setTimeout(() => {
+            const response = generateIntrospectiveResponse(collapsedWisdomText, selectedDomain);
+            
+            // Add the response in parts with delays for a more natural conversation
+            setTimeout(() => {
+                addChatMessage(`<div class="wisdom-interpretation">${response.interpretation}</div>`);
+                
+                setTimeout(() => {
+                    addChatMessage(`<div class="wisdom-question">${response.question}</div>`);
+                    
+                    setTimeout(() => {
+                        addChatMessage(`<div class="wisdom-action">${response.action}</div>`);
+                    }, 1500);
+                }, 1500);
+            }, 1000);
+        }, 1000);
+    });
+    
+    // Event listener for closing the chat
+    wisdomChatClose.addEventListener('click', () => {
+        wisdomChat.classList.remove('visible');
+    });
+    
+    // Event listener for sending a message
+    function sendMessage() {
+        const message = wisdomChatInput.value.trim();
+        if (message) {
+            // Add user message
+            addChatMessage(message, true);
+            wisdomChatInput.value = '';
+            
+            // Simulate typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'wisdom-chat-message cat-message typing-indicator';
+            typingIndicator.innerHTML = '<span>.</span><span>.</span><span>.</span>';
+            wisdomChatMessages.appendChild(typingIndicator);
+            
+            // Generate response based on user message
+            setTimeout(() => {
+                // Remove typing indicator
+                wisdomChatMessages.removeChild(typingIndicator);
+                
+                // Add cat response
+                let response = "I'm contemplating your words. The wisdom you've chosen seems to resonate with what you're sharing. How does it feel to sit with this reflection?";
+                
+                // Check for specific keywords in the message
+                if (message.toLowerCase().includes('how') || message.toLowerCase().includes('what')) {
+                    response = "That's a thoughtful question. The beauty of wisdom is that it meets each of us where we are. What feels most alive in this wisdom for you right now?";
+                } else if (message.toLowerCase().includes('thank')) {
+                    response = "You're welcome. The wisdom was always within you—I'm merely reflecting it back. Is there anything else about this insight you'd like to explore?";
+                } else if (message.toLowerCase().includes('feel') || message.toLowerCase().includes('emotion')) {
+                    response = "Feelings are like weather patterns moving through the vast sky of awareness. Notice how this wisdom touches your emotional landscape without trying to change anything.";
+                }
+                
+                addChatMessage(response);
+            }, 1500);
+        }
+    }
+    
+    // Event listeners for sending a message
+    wisdomChatSend.addEventListener('click', sendMessage);
+    wisdomChatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
 });
 </script>
 {% endblock %}
