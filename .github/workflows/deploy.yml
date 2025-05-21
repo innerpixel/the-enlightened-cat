@@ -79,14 +79,49 @@ jobs:
           # Copy package to server
           scp -o StrictHostKeyChecking=no -P 2223 deploy.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/
           
+      - name: Create deployment script
+        run: |
+          cat > finish-deployment.sh << 'SCRIPT'
+          #!/bin/bash
+          
+          # Stop service
+          sudo systemctl stop enlightened-cat.service
+          
+          # Create target directory if it doesn't exist
+          sudo mkdir -p /var/www/the-enlightened-cat/target/release/
+          
+          # Copy files to production directory
+          sudo cp ~/deploy-temp/target/release/the-enlightened-cat /var/www/the-enlightened-cat/target/release/enlightened-cat
+          sudo cp -r ~/deploy-temp/templates/* /var/www/the-enlightened-cat/templates/
+          sudo cp -r ~/deploy-temp/static/* /var/www/the-enlightened-cat/static/
+          sudo cp -r ~/deploy-temp/src/* /var/www/the-enlightened-cat/src/
+          
+          # Fix permissions
+          sudo chown -R www-data:www-data /var/www/the-enlightened-cat
+          
+          # Start service
+          sudo systemctl start enlightened-cat.service
+          
+          # Check service status
+          sudo systemctl status enlightened-cat.service
+          
+          # Clean up
+          rm -rf ~/deploy-temp
+          rm ~/deploy.tar.gz
+          rm ~/finish-deployment.sh
+          SCRIPT
+          
+      - name: Deploy to VPS
+        run: |
+          # Copy package to server
+          scp -o StrictHostKeyChecking=no -P 2223 deploy.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/
+          scp -o StrictHostKeyChecking=no -P 2223 finish-deployment.sh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/
+          
           # Execute deployment commands
           ssh -o StrictHostKeyChecking=no -p 2223 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             # Extract files
             mkdir -p ~/deploy-temp
             tar -xzf deploy.tar.gz -C ~/deploy-temp
-            
-            # Stop service
-            sudo systemctl stop enlightened-cat.service
             
             # Find the binary in the deploy-temp directory
             BINARY_NAME=$(find ~/deploy-temp/target/release -type f -executable -not -name "*.d" -not -name "*.so" | head -n 1)
@@ -96,26 +131,10 @@ jobs:
             fi
             
             echo "Found binary: $BINARY_NAME"
+            chmod +x ~/finish-deployment.sh
             
-            # Create target directory if it doesn't exist
-            sudo mkdir -p /var/www/the-enlightened-cat/target/release/
-            
-            # Copy files to production directory
-            sudo cp "$BINARY_NAME" /var/www/the-enlightened-cat/target/release/enlightened-cat
-            sudo cp -r ~/deploy-temp/templates/* /var/www/the-enlightened-cat/templates/
-            sudo cp -r ~/deploy-temp/static/* /var/www/the-enlightened-cat/static/
-            sudo cp -r ~/deploy-temp/src/* /var/www/the-enlightened-cat/src/
-            
-            # Fix permissions
-            sudo chown -R www-data:www-data /var/www/the-enlightened-cat
-            
-            # Start service
-            sudo systemctl start enlightened-cat.service
-            
-            # Clean up
-            rm -rf ~/deploy-temp
-            rm deploy.tar.gz
-            
-            # Check service status
-            sudo systemctl status enlightened-cat.service
+            echo "=================================================="
+            echo "Deployment package prepared!"
+            echo "To complete deployment, run: ~/finish-deployment.sh"
+            echo "=================================================="
           EOF
