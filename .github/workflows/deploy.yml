@@ -27,10 +27,24 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       
       - name: Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release
+        run: |
+          cargo build --release
+          ls -la target/release/
+          # Make sure the binary exists
+          if [ ! -f "target/release/enlightened-cat" ]; then
+            echo "Binary not found, checking for other names"
+            ls -la target/release/
+            # Try to find the actual binary name
+            BINARY=$(find target/release -type f -executable -not -name "*.d" -not -name "*.so" | head -n 1)
+            if [ -n "$BINARY" ]; then
+              echo "Found binary at $BINARY"
+              # Create a symlink with the expected name
+              ln -sf "$BINARY" target/release/enlightened-cat
+            else
+              echo "No binary found in target/release"
+              exit 1
+            fi
+          fi
       
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
@@ -41,9 +55,23 @@ jobs:
       
       - name: Deploy to VPS
         run: |
+          # Find the actual binary name
+          BINARY_NAME="enlightened-cat"
+          if [ ! -f "target/release/$BINARY_NAME" ]; then
+            echo "Looking for the actual binary name"
+            BINARY=$(find target/release -type f -executable -not -name "*.d" -not -name "*.so" | head -n 1)
+            if [ -n "$BINARY" ]; then
+              BINARY_NAME=$(basename "$BINARY")
+              echo "Found binary: $BINARY_NAME"
+            else
+              echo "No binary found in target/release"
+              exit 1
+            fi
+          fi
+          
           # Create deployment package
           tar -czf deploy.tar.gz \
-            target/release/enlightened-cat \
+            target/release/$BINARY_NAME \
             templates/ \
             static/ \
             src/
@@ -60,8 +88,20 @@ jobs:
             # Stop service
             sudo systemctl stop enlightened-cat.service
             
+            # Find the binary in the deploy-temp directory
+            BINARY_NAME=$(find ~/deploy-temp/target/release -type f -executable -not -name "*.d" -not -name "*.so" | head -n 1)
+            if [ -z "$BINARY_NAME" ]; then
+              echo "No binary found in deploy-temp/target/release"
+              exit 1
+            fi
+            
+            echo "Found binary: $BINARY_NAME"
+            
+            # Create target directory if it doesn't exist
+            sudo mkdir -p /var/www/the-enlightened-cat/target/release/
+            
             # Copy files to production directory
-            sudo cp ~/deploy-temp/target/release/enlightened-cat /var/www/the-enlightened-cat/target/release/
+            sudo cp "$BINARY_NAME" /var/www/the-enlightened-cat/target/release/enlightened-cat
             sudo cp -r ~/deploy-temp/templates/* /var/www/the-enlightened-cat/templates/
             sudo cp -r ~/deploy-temp/static/* /var/www/the-enlightened-cat/static/
             sudo cp -r ~/deploy-temp/src/* /var/www/the-enlightened-cat/src/
