@@ -509,6 +509,168 @@
         40% { transform: scale(1); opacity: 1; }
     }
     
+    /* Wisdom Chat Interface Styles */
+    .wisdom-chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        height: 450px;
+        background-color: #2a2118;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+        pointer-events: none;
+        transition: all 0.3s ease-in-out;
+        border: 1px solid rgba(248, 147, 86, 0.3);
+    }
+    
+    .wisdom-chat-container.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: all;
+    }
+    
+    .wisdom-chat-header {
+        padding: 15px;
+        background-color: #413317;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(248, 147, 86, 0.3);
+    }
+    
+    .wisdom-chat-title {
+        margin: 0;
+        color: #F89356;
+        font-size: 1.1rem;
+        font-weight: 500;
+        background: linear-gradient(135deg, #F89356, #ffc107);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .wisdom-chat-close {
+        background: none;
+        border: none;
+        color: #F89356;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        transition: all 0.2s ease;
+    }
+    
+    .wisdom-chat-close:hover {
+        color: #ffc107;
+        transform: scale(1.1);
+    }
+    
+    .wisdom-chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: #2a2118;
+    }
+    
+    .wisdom-chat-message {
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 80%;
+        animation: message-appear 0.3s ease-out forwards;
+    }
+    
+    @keyframes message-appear {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .user-message {
+        align-self: flex-end;
+        background-color: #413317;
+        color: #e0e0e0;
+        border-bottom-right-radius: 5px;
+    }
+    
+    .cat-message {
+        align-self: flex-start;
+        background-color: #3a2e1c;
+        color: #e0e0e0;
+        border-bottom-left-radius: 5px;
+    }
+    
+    .wisdom-interpretation, .wisdom-question, .wisdom-action {
+        margin-bottom: 8px;
+    }
+    
+    .wisdom-interpretation {
+        color: #e0e0e0;
+    }
+    
+    .wisdom-question {
+        color: #F89356;
+        font-style: italic;
+    }
+    
+    .wisdom-action {
+        color: #889084;
+        border-top: 1px solid rgba(248, 147, 86, 0.2);
+        padding-top: 8px;
+        font-size: 0.95em;
+    }
+    
+    .wisdom-chat-input-container {
+        padding: 15px;
+        display: flex;
+        gap: 10px;
+        background-color: #3a2e1c;
+        border-top: 1px solid rgba(248, 147, 86, 0.3);
+    }
+    
+    .wisdom-chat-input {
+        flex: 1;
+        padding: 10px 15px;
+        border-radius: 20px;
+        border: 1px solid rgba(248, 147, 86, 0.3);
+        background-color: #2a2118;
+        color: #e0e0e0;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+    
+    .wisdom-chat-input:focus {
+        border-color: #F89356;
+        box-shadow: 0 0 0 2px rgba(248, 147, 86, 0.2);
+    }
+    
+    .wisdom-chat-send {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #F89356;
+        border: none;
+        color: #2a2118;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .wisdom-chat-send:hover {
+        background-color: #ffc107;
+        transform: scale(1.05);
+    }
+    
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .wisdom-field {
@@ -1025,16 +1187,151 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Remove typing indicator
                 wisdomChatMessages.removeChild(typingIndicator);
                 
-                // Add cat response
-                let response = "I'm contemplating your words. The wisdom you've chosen seems to resonate with what you're sharing. How does it feel to sit with this reflection?";
+                // Store previous messages to avoid repetition
+                if (!window.previousResponses) {
+                    window.previousResponses = [];
+                }
                 
-                // Check for specific keywords in the message
-                if (message.toLowerCase().includes('how') || message.toLowerCase().includes('what')) {
-                    response = "That's a thoughtful question. The beauty of wisdom is that it meets each of us where we are. What feels most alive in this wisdom for you right now?";
-                } else if (message.toLowerCase().includes('thank')) {
-                    response = "You're welcome. The wisdom was always within you—I'm merely reflecting it back. Is there anything else about this insight you'd like to explore?";
-                } else if (message.toLowerCase().includes('feel') || message.toLowerCase().includes('emotion')) {
-                    response = "Feelings are like weather patterns moving through the vast sky of awareness. Notice how this wisdom touches your emotional landscape without trying to change anything.";
+                // Create an array of possible responses based on message content and context
+                const possibleResponses = [];
+                
+                // Add domain-specific responses if we have the domain
+                if (selectedDomain) {
+                    const domainResponses = {
+                        'Essence': [
+                            "The essence of your being recognizes this truth. How might you honor this core aspect of yourself today?",
+                            "When we touch our essence, time seems to stand still. What shifts in your perception when you view life from this essential place?",
+                            "Your essence remains unchanged beneath all experiences. What helps you remember this unchanging nature?"
+                        ],
+                        'Inner Path': [
+                            "The inner journey often reveals unexpected treasures. What surprising gift has your inner path offered recently?",
+                            "Sometimes the inner path feels like a labyrinth. Where do you sense you are on your journey right now?",
+                            "The inner path is uniquely yours, yet universally human. How does this paradox show up in your life?"
+                        ],
+                        'Outer Path': [
+                            "Your actions in the world create ripples beyond what you can see. What small action might create positive ripples today?",
+                            "The outer path is where we embody our wisdom. How might you express this wisdom through your actions?",
+                            "Sometimes our outer path surprises us with unexpected turns. What unexpected turn has recently appeared on your path?"
+                        ],
+                        'Portal': [
+                            "Standing at a threshold requires both courage and surrender. Which quality do you need more of right now?",
+                            "Portals often appear when we're ready, even if we don't feel ready. What portal might be inviting you forward?",
+                            "Sometimes we need to cross thresholds alone. Other times we need companions. What supports your crossing now?"
+                        ],
+                        'Friction': [
+                            "Friction often reveals our attachments. What are you holding tightly that might benefit from a gentler grip?",
+                            "The heat of transformation can be uncomfortable yet necessary. How are you caring for yourself in this process?",
+                            "Sometimes what appears as an obstacle is actually a doorway. What current friction might actually be an invitation?"
+                        ],
+                        'Crystallization': [
+                            "When insights crystallize, they often have a feeling of 'rightness' or recognition. What feels clear and true for you now?",
+                            "Crystallized wisdom often comes after periods of confusion or uncertainty. What recent clarity has emerged for you?",
+                            "Sometimes our most profound realizations are deceptively simple. What simple truth has recently become more meaningful?"
+                        ]
+                    };
+                    
+                    if (domainResponses[selectedDomain]) {
+                        possibleResponses.push(...domainResponses[selectedDomain]);
+                    }
+                }
+                
+                // Add responses based on message content
+                if (message.toLowerCase().includes('beautiful') || 
+                    message.toLowerCase().includes('insightful') || 
+                    message.toLowerCase().includes('profound')) {
+                    possibleResponses.push(
+                        "Beauty often emerges when we see truth reflected back to us. What aspect of this wisdom feels most true for you?",
+                        "Insights can be like seeds that continue to grow over time. I wonder how this wisdom might unfold for you in the coming days.",
+                        "When wisdom resonates deeply, it's often because it's awakening something already within you. What's being awakened?"
+                    );
+                }
+                
+                if (message.toLowerCase().includes('interesting') || 
+                    message.toLowerCase().includes('curious') || 
+                    message.toLowerCase().includes('wonder')) {
+                    possibleResponses.push(
+                        "Curiosity is a gentle doorway to wisdom. What aspects of this insight spark your curiosity the most?",
+                        "Sometimes the most valuable insights need time to reveal their full meaning. What might emerge if you sit with this for a while?",
+                        "The space of not-knowing can be fertile ground for discovery. What questions does this wisdom raise for you?"
+                    );
+                }
+                
+                if (message.toLowerCase().includes('yes') || 
+                    message.toLowerCase().includes('agree') || 
+                    message.toLowerCase().includes('true')) {
+                    possibleResponses.push(
+                        "When wisdom resonates as true, it often feels like remembering rather than learning something new. Does that feel accurate?",
+                        "Recognition of truth can be a powerful moment. How might you honor this recognition in a tangible way?",
+                        "Sometimes a simple 'yes' contains worlds of understanding. What else feels aligned with this truth in your life?"
+                    );
+                }
+                
+                if (message.toLowerCase().includes('sit with') || 
+                    message.toLowerCase().includes('reflect') || 
+                    message.toLowerCase().includes('contemplate')) {
+                    possibleResponses.push(
+                        "Taking time to let wisdom percolate is a profound practice. What helps you create space for this kind of reflection?",
+                        "The spaces between our thoughts are often where the deepest insights emerge. How do you cultivate that spaciousness?",
+                        "Contemplation is a lost art in our busy world. What practices help you slow down enough to truly absorb wisdom?"
+                    );
+                }
+                
+                if (message.toLowerCase().includes('how') || 
+                    message.toLowerCase().includes('what')) {
+                    possibleResponses.push(
+                        "That's a thoughtful question. The beauty of wisdom is that it meets each of us where we are. What feels most alive in this wisdom for you right now?",
+                        "Questions open doorways to new understanding. What intuitive response arises when you sit with your question?",
+                        "The most powerful questions often lead us back to ourselves. What does your inner wisdom suggest?"
+                    );
+                }
+                
+                if (message.toLowerCase().includes('thank')) {
+                    possibleResponses.push(
+                        "You're welcome. The wisdom was always within you—I'm merely reflecting it back. Is there anything else about this insight you'd like to explore?",
+                        "Gratitude is itself a form of wisdom. What else in your life might benefit from this appreciative awareness?",
+                        "It's my pleasure to walk this path of discovery with you. What other aspects of wisdom are calling to you?"
+                    );
+                }
+                
+                if (message.toLowerCase().includes('feel') || 
+                    message.toLowerCase().includes('emotion')) {
+                    possibleResponses.push(
+                        "Feelings are like weather patterns moving through the vast sky of awareness. Notice how this wisdom touches your emotional landscape without trying to change anything.",
+                        "Our emotions often carry wisdom that our rational mind can't access. What might your feelings be revealing about this insight?",
+                        "The body's wisdom speaks through sensation and emotion. Where do you feel this wisdom in your physical being?"
+                    );
+                }
+                
+                // Add general responses if we don't have specific ones
+                if (possibleResponses.length === 0) {
+                    possibleResponses.push(
+                        "I notice you're engaging with this wisdom. What aspect of it feels most relevant to your current life situation?",
+                        "Sometimes wisdom needs time to unfold its full meaning. How might you create space for this insight to deepen?",
+                        "Your unique perspective brings this wisdom to life in a new way. How does it speak to your particular journey?",
+                        "The dance between universal wisdom and personal experience is where transformation happens. What's being transformed for you?",
+                        "Every insight contains an invitation. What invitation do you sense in this wisdom?"
+                    );
+                }
+                
+                // Filter out responses we've used recently to avoid repetition
+                const freshResponses = possibleResponses.filter(response => !window.previousResponses.includes(response));
+                
+                // If we've used all possible responses, reset the history
+                let response;
+                if (freshResponses.length > 0) {
+                    // Select a random response from the fresh options
+                    response = freshResponses[Math.floor(Math.random() * freshResponses.length)];
+                } else {
+                    // If we've used all responses, clear history and use any response
+                    window.previousResponses = [];
+                    response = possibleResponses[Math.floor(Math.random() * possibleResponses.length)];
+                }
+                
+                // Remember this response to avoid repetition
+                window.previousResponses.push(response);
+                // Keep the history manageable
+                if (window.previousResponses.length > 5) {
+                    window.previousResponses.shift();
                 }
                 
                 addChatMessage(response);
