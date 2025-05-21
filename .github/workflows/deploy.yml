@@ -31,7 +31,7 @@ jobs:
           cargo build --release
           ls -la target/release/
           # Make sure the binary exists
-          if [ ! -f "target/release/enlightened-cat" ]; then
+          if [ ! -f "target/release/the-enlightened-cat" ]; then
             echo "Binary not found, checking for other names"
             ls -la target/release/
             # Try to find the actual binary name
@@ -39,7 +39,7 @@ jobs:
             if [ -n "$BINARY" ]; then
               echo "Found binary at $BINARY"
               # Create a symlink with the expected name
-              ln -sf "$BINARY" target/release/enlightened-cat
+              ln -sf "$BINARY" target/release/the-enlightened-cat
             else
               echo "No binary found in target/release"
               exit 1
@@ -56,7 +56,7 @@ jobs:
       - name: Deploy to VPS
         run: |
           # Find the actual binary name
-          BINARY_NAME="enlightened-cat"
+          BINARY_NAME="the-enlightened-cat"
           if [ ! -f "target/release/$BINARY_NAME" ]; then
             echo "Looking for the actual binary name"
             BINARY=$(find target/release -type f -executable -not -name "*.d" -not -name "*.so" | head -n 1)
@@ -91,7 +91,7 @@ jobs:
           sudo mkdir -p /var/www/the-enlightened-cat/target/release/
           
           # Copy files to production directory
-          sudo cp ~/deploy-temp/target/release/the-enlightened-cat /var/www/the-enlightened-cat/target/release/enlightened-cat
+          sudo cp ~/deploy-temp/target/release/the-enlightened-cat /var/www/the-enlightened-cat/target/release/the-enlightened-cat
           sudo cp -r ~/deploy-temp/templates/* /var/www/the-enlightened-cat/templates/
           sudo cp -r ~/deploy-temp/static/* /var/www/the-enlightened-cat/static/
           sudo cp -r ~/deploy-temp/src/* /var/www/the-enlightened-cat/src/
