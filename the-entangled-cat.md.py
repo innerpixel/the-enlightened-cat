@@ -42,4 +42,4 @@ class QuantumCatEntanglement:
         }
     
     async def explain_to_non_cat_people(self):
-        return "It's like quantum physics - if you think you understand it, you don't understand it at all! 😸" 
+        return "It's like quantum physics - if you think you understand it, you don't understand it at all! 😸" git stats 
