@@ -17,12 +17,7 @@ use tracing::info;     // For logging information
 
 // Import our application state and template definitions
 use crate::state::AppState;
-use crate::templates::*;  // Import all template structs (IndexTemplate, AboutTemplate, etc.)
-
-// Define a template for the quantum wisdom page
-#[derive(Template)]
-#[template(path = "quantum_wisdom.html")]
-pub struct QuantumWisdomTemplate {}
+use crate::templates::{AboutTemplate, IndexTemplate, WisdomTemplate, QuantumFieldTemplate};  // Import all template structs (IndexTemplate, AboutTemplate, etc.)
 
 /// Handler function for the home page (GET /)
 /// 
@@ -104,20 +99,22 @@ pub async fn wisdom_page(State(state): State<AppState>) -> Html<String> {
     }))
 }
 
-/// Handler function for the quantum wisdom page (GET /quantum-wisdom)
+// Quantum Whispurrs page removed - replaced by Quantum Field
+
+/// Handler function for the quantum field page (GET /quantum-field)
 /// 
-/// This function renders the quantum wisdom page that displays wisdom in
-/// multiple quantum states until observed by the user.
-pub async fn quantum_wisdom_page() -> Html<String> {
-    // Log that we're rendering the quantum wisdom page
-    info!("Rendering quantum wisdom page");
+/// This function renders the 6-Fold Wisdom Field page that presents wisdom
+/// in a structured field of six nodes representing different dimensions of awareness.
+pub async fn quantum_field_page() -> Html<String> {
+    // Log that we're rendering the quantum field page
+    info!("Rendering quantum field page");
     
-    // Create a template instance for the quantum wisdom page
-    let template = QuantumWisdomTemplate {};
+    // Create a template instance
+    let template = QuantumFieldTemplate {};
     
     // Render the template to HTML and wrap it in an Html response
     // If rendering fails, provide a simple fallback HTML
     Html(template.render().unwrap_or_else(|_| {
-        "<h1>Quantum Whispurrs</h1><p>Quantum states loading...</p>".to_string()
+        "<html><body><h1>The Enlightened Cat</h1><p>The quantum field collapsed unexpectedly. Please try again later.</p></body></html>".to_string()
     }))
 }

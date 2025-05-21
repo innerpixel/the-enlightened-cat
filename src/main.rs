@@ -25,7 +25,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 // Import our application modules
 mod config;    // Configuration management (environment variables)
 mod mistral;   // Mistral AI API client
-mod quantum;   // Quantum wisdom functionality
+mod quantum_field; // Quantum field functionality
 mod routes;    // HTTP route handlers
 mod state;     // Application state management
 mod templates; // HTML templates using Askama
@@ -60,14 +60,14 @@ async fn main() -> Result<()> {
         // API routes - JSON endpoints
         .route("/api/chat", post(routes::chat::handle_chat))             // POST /api/chat - Chat with the cat
         .route("/api/daily-wisdom", get(routes::wisdom::get_daily_wisdom)) // GET /api/daily-wisdom - Get wisdom as JSON
-        .route("/api/quantum-wisdom", get(routes::quantum::get_quantum_wisdom)) // GET /api/quantum-wisdom - Get quantum wisdom
-        .route("/api/quantum-wisdom/observe", get(routes::quantum::observe_quantum_wisdom)) // GET /api/quantum-wisdom/observe - Observe quantum wisdom
+        .route("/api/quantum-field", get(routes::quantum_field::get_quantum_field)) // GET /api/quantum-field - Get quantum field
+        .route("/api/quantum-field/collapse", get(routes::quantum_field::collapse_quantum_field)) // GET /api/quantum-field/collapse - Collapse quantum field
         
         // Page routes - HTML endpoints
         .route("/", get(routes::pages::index))           // GET / - Home page
-        .route("/about", get(routes::pages::about))     // GET /about - About page
+        .route("/about", get(routes::pages::about))       // GET /about - About page
         .route("/wisdom", get(routes::pages::wisdom_page)) // GET /wisdom - Daily wisdom page
-        .route("/quantum-wisdom", get(routes::pages::quantum_wisdom_page)) // GET /quantum-wisdom - Quantum wisdom page
+        .route("/quantum-field", get(routes::pages::quantum_field_page)) // GET /quantum-field - Quantum field page
         
         // Serve static files (CSS, JS, images)
         // Similar to express.static in Node.js

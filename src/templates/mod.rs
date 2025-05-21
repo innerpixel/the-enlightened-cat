@@ -15,3 +15,7 @@ pub struct AboutTemplate {}
 pub struct WisdomTemplate {
     pub daily_wisdom: String,
 }
+
+#[derive(Template)]
+#[template(path = "quantum_field.html")]
+pub struct QuantumFieldTemplate {}

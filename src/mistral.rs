@@ -7,7 +7,7 @@ use std::cell::RefCell;
 use tracing::{error, info};
 
 use crate::config::Config;
-use crate::quantum::QuantumWisdom;
+use crate::quantum_field::QuantumField;
 
 // Store conversation history in memory (would be better in a database for production)
 thread_local! {
@@ -205,33 +205,75 @@ impl MistralClient {
         self.chat(&conversation, "mistral-small").await
     }
 
-    pub async fn get_quantum_wisdom(&self) -> Result<QuantumWisdom> {
+    // Quantum Wisdom method removed - replaced by Quantum Field
+    
+    pub async fn get_quantum_field(&self) -> Result<QuantumField> {
         let mut conversation = Conversation::new();
         
         conversation.add_system_message(
-            "You are The Enlightened Cat, a wise feline who exists in a quantum state.
-            Generate 3-5 DIFFERENT versions of a daily wisdom ('Quantum Whispurr').
-            Each version should:
-            - Feel like it comes from a slightly different reality or perspective
-            - Be 30-70 words, poetic or like a tiny fable
-            - Include a subtle cat perspective
-            - End with a question or invitation to reflect
+            "You are The Enlightened Cat, a wise feline who understands quantum physics and spiritual wisdom.
+            Create six poetic fragments of wisdom representing symbolic domains:
+            1. Essence - Core truth or soul resonance
+            2. Inner Path - Internal reflection, personal myth
+            3. Outer Path - Action or movement in the world
+            4. Portal - Invitation, threshold, or call
+            5. Friction - Challenge, tension, or transformation
+            6. Crystallization - Integration, revelation, or clarity
             
-            Format your response as a JSON array of strings, each containing one version.
-            Example: [\"Wisdom 1...\", \"Wisdom 2...\", \"Wisdom 3...\"]"
+            Each fragment should be:
+            - Short (10-20 words)
+            - Evocative and open-ended—like a seed
+            - Poetic and mysterious
+            - Suitable for visualization
+            - Containing subtle feline wisdom
+            
+            Format your response as a JSON array of 6 strings, each containing one wisdom fragment.
+            Example: [\"Fragment 1...\", \"Fragment 2...\", \"Fragment 3...\", \"Fragment 4...\", \"Fragment 5...\", \"Fragment 6...\"]"
         );
         
-        conversation.add_user_message("Generate quantum wisdom variants");
+        conversation.add_user_message("Generate six wisdom fragments for the quantum field");
         
         let response = self.chat(&conversation, "mistral-small").await?;
         
         // Parse the JSON array from the response
-        let wisdom_variants: Vec<String> = serde_json::from_str(&response)
+        let wisdom_seeds: Vec<String> = serde_json::from_str(&response)
             .unwrap_or_else(|_| {
-                // Fallback if parsing fails
-                vec![response.clone()]
+                // Fallback if parsing fails - generate 6 placeholder seeds
+                vec![
+                    "A single note played in the silent forest".to_string(),
+                    "The mirror ripples but does not break".to_string(),
+                    "Footsteps echo through the sky-bound stair".to_string(),
+                    "The door hums though no hand touches it".to_string(),
+                    "Ashes glowing under the weight of stillness".to_string(),
+                    "The gem turns inside the breathless hour".to_string()
+                ]
             });
         
-        Ok(QuantumWisdom::new(wisdom_variants))
+        // Ensure we have exactly 6 seeds
+        let seeds = if wisdom_seeds.len() < 6 {
+            // Pad with defaults if we have fewer than 6
+            let mut seeds = wisdom_seeds;
+            let defaults = vec![
+                "A single note played in the silent forest".to_string(),
+                "The mirror ripples but does not break".to_string(),
+                "Footsteps echo through the sky-bound stair".to_string(),
+                "The door hums though no hand touches it".to_string(),
+                "Ashes glowing under the weight of stillness".to_string(),
+                "The gem turns inside the breathless hour".to_string()
+            ];
+            
+            for i in seeds.len()..6 {
+                seeds.push(defaults[i % defaults.len()].clone());
+            }
+            seeds
+        } else if wisdom_seeds.len() > 6 {
+            // Truncate if we have more than 6
+            wisdom_seeds[0..6].to_vec()
+        } else {
+            // Use as-is if we have exactly 6
+            wisdom_seeds
+        };
+        
+        Ok(QuantumField::new(seeds))
     }
 }
