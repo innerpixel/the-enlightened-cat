@@ -77,10 +77,10 @@ jobs:
             src/
           
           # Copy package to server
-          scp -o StrictHostKeyChecking=no deploy.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/
+          scp -o StrictHostKeyChecking=no -P 2223 deploy.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/
           
           # Execute deployment commands
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -p 2223 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             # Extract files
             mkdir -p ~/deploy-temp
             tar -xzf deploy.tar.gz -C ~/deploy-temp
