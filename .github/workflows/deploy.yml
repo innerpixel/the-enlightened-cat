@@ -100,10 +100,10 @@ jobs:
           sudo chown -R www-data:www-data /var/www/the-enlightened-cat
           
           # Start service
-          sudo systemctl start enlightened-cat.service
+          sudo systemctl start the-enlightened-cat.service
           
           # Check service status
-          sudo systemctl status enlightened-cat.service
+          sudo systemctl status the-enlightened-cat.service
           
           # Clean up
           rm -rf ~/deploy-temp
