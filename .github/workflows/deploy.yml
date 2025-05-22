@@ -85,7 +85,7 @@ jobs:
           #!/bin/bash
           
           # Stop service
-          sudo systemctl stop enlightened-cat.service
+          sudo systemctl stop the-enlightened-cat.service
           
           # Create target directory if it doesn't exist
           sudo mkdir -p /var/www/the-enlightened-cat/target/release/
